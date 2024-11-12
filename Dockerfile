@@ -20,9 +20,8 @@ WORKDIR /opt
 
 RUN git clone https://github.com/ACE-innovate/wefa-seg-serverless
 
-# Copy the environment.yaml file and create the Conda environment
-COPY ./anydoor/environment.yaml /tmp/environment.yaml
-RUN conda env create -f /tmp/environment.yaml
+# create the Conda environment
+RUN conda env create -f /opt/wefa-seg-serverless/anydoor/environment.yaml
 
 # Set up the shell to use the Conda environment by default
 SHELL ["conda", "run", "-n", "anydoor", "/bin/bash", "-c"]
