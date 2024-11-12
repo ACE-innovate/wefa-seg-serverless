@@ -15,7 +15,6 @@ scipy==1.9.1
 setuptools==66.0.0
 share==1.0.4
 submitit==1.5.1
-runpod
 timm==0.6.12
 torch==2.0.0
 torchmetrics==0.6.0
