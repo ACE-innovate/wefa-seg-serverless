@@ -1,1 +1,1 @@
-/bin/bash -c "source /opt/miniconda3/etc/profile.d/conda.sh && conda activate xbase"
+/bin/bash -c "cd /opt/wefa-seg-serverless/anydoor && python run_inference_api.py"
