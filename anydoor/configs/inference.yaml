@@ -1,4 +1,4 @@
 
-pretrained_model: /workspace/train-wefadoor-master/anydoor/lightning_logs/version_1/checkpoints/epoch=1-step=2499.ckpt
+pretrained_model: /workspace/default.ckpt
 config_file: configs/anydoor.yaml
 save_memory: False
