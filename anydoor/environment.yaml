@@ -1,4 +1,4 @@
-name: xbase
+name: base
 channels:
   - defaults
 dependencies:
