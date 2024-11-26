@@ -14,12 +14,10 @@ import albumentations as A
 from omegaconf import OmegaConf
 from PIL import Image
 
-
 save_memory = True
 disable_verbosity()
 if save_memory:
     enable_sliced_attention()
-
 
 config = OmegaConf.load('./configs/inference.yaml')
 model_ckpt =  config.pretrained_model
@@ -218,7 +216,6 @@ def inference_single_image(ref_image, ref_mask, tar_image, tar_mask, guidance_sc
     gen_image = crop_back(pred, tar_image, sizes, tar_box_yyxx_crop) 
     return gen_image
 
-
 import cv2
 import numpy as np
 import base64
@@ -250,9 +247,7 @@ def image_to_base64(img):
     base64_str = base64.b64encode(buffer).decode("utf-8")
     return base64_str
 
-
 class RequestHandler(BaseHTTPRequestHandler):
-    API_KEY = "xiCQTaoQKXUNATzuFLWRgtoJKiFXiDGvnk"
 
     def _set_response(self, status_code=200, content_type='application/json'):
         self.send_response(status_code)
@@ -284,16 +279,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.handle_not_supported_method()
         
     def do_POST(self):
-        print("Received POST request...")
-        received_api_key = self.headers.get('X-API-Key')
-        # Check if the API key is correct
-        if received_api_key != self.API_KEY:
-            # If the API key is incorrect, respond with 401 Unauthorized
-            self._set_response(401)
-            self.wfile.write(b'{"error": "Invalid API key"}')
-            print("Invalid API key")
-            return
-
         content_length = int(self.headers['Content-Length'])
         print(f"Content Length: {content_length}")
         
@@ -311,10 +296,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
                 ref_image = base64_to_cv2_image(data['ref_image'])
                 tar_image = base64_to_cv2_image(data['tar_image'])
-                # print(seed)
-                # print(steps)
-                # print(guidance_scale) 
-                # Process reference mask
+
                 ref_mask_img = base64_to_cv2_image(data['ref_mask'])
                 ref_mask = cv2.cvtColor(ref_mask_img, cv2.COLOR_RGB2GRAY)
                 ref_mask = (ref_mask > 128).astype(np.uint8)
@@ -324,7 +306,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                 tar_mask = cv2.cvtColor(tar_mask_img, cv2.COLOR_RGB2GRAY)
                 tar_mask = (tar_mask > 128).astype(np.uint8)
 
-                output_dir = '/work/ADOOR_ACE/test_out'
+                output_dir = '/workspace/output'
                 os.makedirs(output_dir, exist_ok=True)
 
                 # Save reference and target images
@@ -363,8 +345,6 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.wfile.write(error_data)
             print("Sent error response")
 
-        
-
 def run(server_class=HTTPServer, handler_class=RequestHandler, port=8084):
     server_address = ('', port)
     httpd = server_class(server_address, handler_class)
@@ -373,5 +353,3 @@ def run(server_class=HTTPServer, handler_class=RequestHandler, port=8084):
 
 if __name__ == "__main__":
     run()
-
-
